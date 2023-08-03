@@ -12,10 +12,10 @@ func New() *fiber.App {
 	auth := api.Group("/auth")
 
 	auth.Post("/register", handlers.Register)
-	app.Post("/login", handlers.Login)
-	app.Post("/verify_otp", handlers.VerifyOTP)
-	app.Post("/resend_otp", handlers.ResendOTP)
-	app.Post("/me", handlers.GetCurrentUser)
+	auth.Post("/login", handlers.Login)
+	auth.Post("/verify_otp", handlers.VerifyOTP)
+	auth.Post("/resend_otp", handlers.ResendOTP)
+	auth.Post("/me", handlers.GetCurrentUser)
 
 	return app
 }
