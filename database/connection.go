@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"log"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -16,10 +17,8 @@ func Connect() error {
 	if err != nil {
 		return err
 	}
+	log.Printf("Connected with databse %s", dbName)
 	db := client.Database(dbName)
-	if err != nil {
-		return err
-	}
 	Mg = MongoInstance{
 		Client: client,
 		Db:     db,
