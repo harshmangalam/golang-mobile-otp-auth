@@ -11,8 +11,11 @@ func New() *fiber.App {
 	api := app.Group("/api")
 	auth := api.Group("/auth")
 
-	auth.Post("/register", handlers.HandleRegister)
-	app.Post("/login")
+	auth.Post("/register", handlers.Register)
+	app.Post("/login", handlers.Login)
+	app.Post("/verify_otp", handlers.VerifyOTP)
+	app.Post("/resend_otp", handlers.ResendOTP)
+	app.Post("/me", handlers.GetCurrentUser)
 
 	return app
 }
