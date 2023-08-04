@@ -8,7 +8,7 @@ import (
 )
 
 func Register(c *fiber.Ctx) error {
-	// incomming body data
+	// request body data
 	body := new(schema.RegisterBody)
 	if err := c.BodyParser(body); err != nil {
 		return c.JSON(ResponseHTTP{
@@ -59,10 +59,38 @@ func Register(c *fiber.Ctx) error {
 }
 
 func Login(c *fiber.Ctx) error {
+	// request body data
+	body := new(schema.LoginSchema)
+	if err := c.BodyParser(body); err != nil {
+		return c.JSON(ResponseHTTP{
+			Success: false,
+			Data:    nil,
+			Message: err.Error(),
+		})
+	}
+	// find phone in database
+	user, err := utils.FindUserByPhone(body.Phone)
+
+	if err != nil {
+		return c.JSON(ResponseHTTP{
+			Success: false,
+			Data:    nil,
+			Message: err.Error(),
+		})
+	}
+
+	if user == nil {
+		return c.JSON(ResponseHTTP{
+			Success: false,
+			Data:    nil,
+			Message: "Phone number not exists",
+		})
+	}
+
 	return c.JSON(ResponseHTTP{
 		Success: true,
-		Data:    nil,
-		Message: "Account registered successfully",
+		Data:    user,
+		Message: "Login successfully",
 	})
 }
 func VerifyOTP(c *fiber.Ctx) error {
