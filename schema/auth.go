@@ -8,3 +8,8 @@ type RegisterBody struct {
 type LoginSchema struct {
 	Phone string `json:"phone"`
 }
+
+type VerifyOTPSchema struct {
+	Phone string `json:"phone"`
+	Otp   string `json:"otp"`
+}
