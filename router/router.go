@@ -5,10 +5,13 @@ import (
 	"auth/middleware"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/compress"
 )
 
 func New() *fiber.App {
 	app := fiber.New()
+	// compression middleware
+	app.Use(compress.New())
 	api := app.Group("/api")
 	auth := api.Group("/auth")
 
