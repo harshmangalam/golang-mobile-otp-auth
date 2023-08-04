@@ -7,6 +7,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/compress"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 )
 
 func New() *fiber.App {
@@ -15,6 +16,8 @@ func New() *fiber.App {
 	app.Use(compress.New())
 	// cors middleware
 	app.Use(cors.New())
+	// logger middleare
+	app.Use(logger.New())
 	api := app.Group("/api")
 	auth := api.Group("/auth")
 
