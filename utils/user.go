@@ -7,7 +7,9 @@ import (
 	"context"
 	"math/rand"
 	"strconv"
+	"time"
 
+	"github.com/golang-jwt/jwt/v5"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -70,4 +72,15 @@ func GenerateRandomNumber() string {
 	// Generate a random number between 1000 and 9999 (inclusive)
 	num := rand.Intn(9000) + 1000
 	return strconv.Itoa(num)
+}
+
+func GenerateJWT(id string) (string, error) {
+	token := jwt.New(jwt.SigningMethodHS256)
+
+	claims := token.Claims.(jwt.MapClaims)
+	claims["userId"] = id
+	claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
+
+	return token.SignedString("SECRET")
+
 }
