@@ -1,9 +1,9 @@
 package handler
 
 import (
-	"auth/models"
+	"auth/model"
 	"auth/schema"
-	"auth/utils"
+	"auth/util"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -21,7 +21,7 @@ func Register(c *fiber.Ctx) error {
 
 	// validate duplicate mobile number
 
-	user, err := utils.FindUserByPhone(body.Phone)
+	user, err := util.FindUserByPhone(body.Phone)
 
 	if err != nil {
 		return c.JSON(ResponseHTTP{
@@ -41,7 +41,7 @@ func Register(c *fiber.Ctx) error {
 
 	// create new user
 
-	id, err := utils.InsertUser(body)
+	id, err := util.InsertUser(body)
 	if err != nil {
 		return c.JSON(ResponseHTTP{
 			Success: false,
@@ -70,7 +70,7 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 	// find phone in database
-	user, err := utils.FindUserByPhone(body.Phone)
+	user, err := util.FindUserByPhone(body.Phone)
 
 	if err != nil {
 		return c.JSON(ResponseHTTP{
@@ -88,10 +88,10 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 
-	otp := utils.GenerateRandomNumber()
+	otp := util.GenerateRandomNumber()
 
 	// save otp in database
-	utils.UpdateUser(user.ID, map[string]any{
+	util.UpdateUser(user.ID, map[string]any{
 		"otp": otp,
 	})
 	// send otp to user phone
@@ -115,7 +115,7 @@ func VerifyOTP(c *fiber.Ctx) error {
 	}
 
 	// find phone in database
-	user, err := utils.FindUserByPhone(body.Phone)
+	user, err := util.FindUserByPhone(body.Phone)
 
 	if err != nil {
 		return c.JSON(ResponseHTTP{
@@ -142,7 +142,7 @@ func VerifyOTP(c *fiber.Ctx) error {
 	}
 
 	// generate jwt token
-	token, err := utils.GenerateJWT(user.ID.Hex())
+	token, err := util.GenerateJWT(user.ID.Hex())
 	if err != nil {
 		return c.JSON(ResponseHTTP{
 			Success: false,
@@ -172,7 +172,7 @@ func ResendOTP(c *fiber.Ctx) error {
 	}
 
 	// find phone in database
-	user, err := utils.FindUserByPhone(body.Phone)
+	user, err := util.FindUserByPhone(body.Phone)
 
 	if err != nil {
 		return c.JSON(ResponseHTTP{
@@ -190,10 +190,10 @@ func ResendOTP(c *fiber.Ctx) error {
 		})
 	}
 
-	otp := utils.GenerateRandomNumber()
+	otp := util.GenerateRandomNumber()
 
 	// save otp in database
-	utils.UpdateUser(user.ID, map[string]any{
+	util.UpdateUser(user.ID, map[string]any{
 		"otp": otp,
 	})
 	// send otp to user phone
@@ -205,7 +205,7 @@ func ResendOTP(c *fiber.Ctx) error {
 }
 
 func GetCurrentUser(c *fiber.Ctx) error {
-	user := c.Locals("user").(*models.User)
+	user := c.Locals("user").(*model.User)
 	user.Otp = ""
 	return c.JSON(ResponseHTTP{
 		Success: true,

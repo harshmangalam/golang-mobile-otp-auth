@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"auth/config"
-	"auth/utils"
+	"auth/util"
 
 	jwtware "github.com/gofiber/contrib/jwt"
 	"github.com/gofiber/fiber/v2"
@@ -23,7 +23,7 @@ func jwtSuccess(c *fiber.Ctx) error {
 	payload := c.Locals("payload").(*jwt.Token)
 	claims := payload.Claims.(jwt.MapClaims)
 	userId := claims["userId"].(string)
-	user, err := utils.FindUserById(userId)
+	user, err := util.FindUserById(userId)
 	if err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"success": false,

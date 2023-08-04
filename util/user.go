@@ -1,9 +1,9 @@
-package utils
+package util
 
 import (
 	"auth/config"
 	"auth/database"
-	"auth/models"
+	"auth/model"
 	"auth/schema"
 	"context"
 	"math/rand"
@@ -16,7 +16,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func FindUserByPhone(phone string) (*models.User, error) {
+func FindUserByPhone(phone string) (*model.User, error) {
 	// Create a context and a collection instance
 	ctx := context.TODO()
 	collection := database.Mg.Db.Collection(database.Users)
@@ -25,7 +25,7 @@ func FindUserByPhone(phone string) (*models.User, error) {
 	filter := bson.M{"phone": phone}
 
 	// Create a variable to store the result
-	var result models.User
+	var result model.User
 
 	// Find the user with the given phone number
 	err := collection.FindOne(ctx, filter).Decode(&result)
@@ -69,7 +69,7 @@ func UpdateUser(userID primitive.ObjectID, updatedFields map[string]any) error {
 
 }
 
-func FindUserById(userId string) (*models.User, error) {
+func FindUserById(userId string) (*model.User, error) {
 	// Create a context and a collection instance
 	id, err := primitive.ObjectIDFromHex(userId)
 	if err != nil {
@@ -82,7 +82,7 @@ func FindUserById(userId string) (*models.User, error) {
 	filter := bson.M{"_id": id}
 
 	// Create a variable to store the result
-	var result models.User
+	var result model.User
 
 	// Find the user with the given phone number
 	err = collection.FindOne(ctx, filter).Decode(&result)
