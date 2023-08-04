@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"auth/handlers"
+	"auth/handler"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -11,11 +11,11 @@ func New() *fiber.App {
 	api := app.Group("/api")
 	auth := api.Group("/auth")
 
-	auth.Post("/register", handlers.Register)
-	auth.Post("/login", handlers.Login)
-	auth.Post("/verify_otp", handlers.VerifyOTP)
-	auth.Post("/resend_otp", handlers.ResendOTP)
-	auth.Post("/me", handlers.GetCurrentUser)
+	auth.Post("/register", handler.Register)
+	auth.Post("/login", handler.Login)
+	auth.Post("/verify_otp", handler.VerifyOTP)
+	auth.Post("/resend_otp", handler.ResendOTP)
+	auth.Post("/me", handler.GetCurrentUser)
 
 	return app
 }

@@ -1,4 +1,4 @@
-package handlers
+package handler
 
 type ResponseHTTP struct {
 	Success bool   `json:"success"`
