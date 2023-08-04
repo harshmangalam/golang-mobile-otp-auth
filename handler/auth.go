@@ -141,7 +141,7 @@ func VerifyOTP(c *fiber.Ctx) error {
 	}
 
 	// generate jwt token
-	token, err := utils.GenerateJWT("1")
+	token, err := utils.GenerateJWT(user.ID.Hex())
 	if err != nil {
 		return c.JSON(ResponseHTTP{
 			Success: false,
