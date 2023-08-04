@@ -87,11 +87,20 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 
+	otp := utils.GenerateRandomNumber()
+
+	// save otp in database
+	utils.UpdateUser(user.ID, map[string]any{
+		"otp": otp,
+	})
+	// send otp to user phone
+
 	return c.JSON(ResponseHTTP{
 		Success: true,
 		Data:    user,
 		Message: "Login successfully",
 	})
+
 }
 func VerifyOTP(c *fiber.Ctx) error {
 	return c.JSON(ResponseHTTP{

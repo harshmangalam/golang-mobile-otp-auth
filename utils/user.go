@@ -8,6 +8,7 @@ import (
 	"math/rand"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -44,6 +45,23 @@ func InsertUser(user *schema.RegisterBody) (any, error) {
 	// Insert the user into the collection
 	result, err := collection.InsertOne(ctx, user)
 	return result.InsertedID, err
+}
+
+func UpdateUser(userID primitive.ObjectID, updatedFields map[string]any) error {
+	// Create a context and a collection instance
+	ctx := context.TODO()
+	collection := database.Mg.Db.Collection(database.Users)
+
+	// Create a filter to find the user by ID
+	filter := bson.M{"_id": userID}
+
+	// Create an update with the provided fields
+	update := bson.M{"$set": updatedFields}
+
+	// Update the user document in the collection
+	_, err := collection.UpdateOne(ctx, filter, update)
+	return err
+
 }
 
 func GenerateRandomNumber() int {
