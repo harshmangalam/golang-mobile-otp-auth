@@ -2,13 +2,13 @@ package main
 
 import (
 	"auth/database"
-	"auth/routes"
+	"auth/router"
 	"log"
 )
 
 func main() {
 
-	app := routes.New()
+	app := router.New()
 	err := database.Connect()
 	if err != nil {
 		panic(err)
