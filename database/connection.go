@@ -1,6 +1,7 @@
 package database
 
 import (
+	"auth/config"
 	"context"
 	"log"
 
@@ -11,8 +12,8 @@ import (
 var Mg MongoInstance
 
 func Connect() error {
-	dbName := "mobile_auth"
-	uri := "mongodb://127.0.0.1:27017/" + dbName
+	dbName := config.Config("DATABASE_NAME")
+	uri := config.Config("DATABASE_URI") + dbName
 	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
 	if err != nil {
 		return err

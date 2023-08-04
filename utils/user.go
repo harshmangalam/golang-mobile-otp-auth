@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"auth/config"
 	"auth/database"
 	"auth/models"
 	"auth/schema"
@@ -79,6 +80,6 @@ func GenerateJWT(id string) (string, error) {
 	claims := token.Claims.(jwt.MapClaims)
 	claims["userId"] = id
 	claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
-	return token.SignedString([]byte("SECRET"))
+	return token.SignedString([]byte(config.Config("SECRET")))
 
 }
