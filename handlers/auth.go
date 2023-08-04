@@ -140,9 +140,21 @@ func VerifyOTP(c *fiber.Ctx) error {
 		})
 	}
 
+	// generate jwt token
+	token, err := utils.GenerateJWT("1")
+	if err != nil {
+		return c.JSON(ResponseHTTP{
+			Success: false,
+			Data:    nil,
+			Message: err.Error(),
+		})
+	}
+
 	return c.JSON(ResponseHTTP{
 		Success: true,
-		Data:    nil,
+		Data: fiber.Map{
+			"token": "Bearer " + token,
+		},
 		Message: "Account login successfully",
 	})
 }

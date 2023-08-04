@@ -76,11 +76,9 @@ func GenerateRandomNumber() string {
 
 func GenerateJWT(id string) (string, error) {
 	token := jwt.New(jwt.SigningMethodHS256)
-
 	claims := token.Claims.(jwt.MapClaims)
 	claims["userId"] = id
 	claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
-
-	return token.SignedString("SECRET")
+	return token.SignedString([]byte("SECRET"))
 
 }
