@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"auth/models"
 	"auth/schema"
 	"auth/utils"
 
@@ -204,9 +205,11 @@ func ResendOTP(c *fiber.Ctx) error {
 }
 
 func GetCurrentUser(c *fiber.Ctx) error {
+	user := c.Locals("user").(*models.User)
+	user.Otp = ""
 	return c.JSON(ResponseHTTP{
 		Success: true,
-		Data:    nil,
+		Data:    user,
 		Message: "Get current user",
 	})
 }

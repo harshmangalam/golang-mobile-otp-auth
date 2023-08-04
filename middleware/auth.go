@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"auth/config"
-	"fmt"
+	"auth/utils"
 
 	jwtware "github.com/gofiber/contrib/jwt"
 	"github.com/gofiber/fiber/v2"
@@ -15,14 +15,23 @@ func Protected() fiber.Handler {
 		SigningKey:     jwtware.SigningKey{Key: []byte(config.Config("SECRET"))},
 		ErrorHandler:   jwtError,
 		SuccessHandler: jwtSuccess,
+		ContextKey:     "payload",
 	})
 }
 
 func jwtSuccess(c *fiber.Ctx) error {
-	user := c.Locals("user").(*jwt.Token)
-	claims := user.Claims.(jwt.MapClaims)
+	payload := c.Locals("payload").(*jwt.Token)
+	claims := payload.Claims.(jwt.MapClaims)
 	userId := claims["userId"].(string)
-	fmt.Println(userId)
+	user, err := utils.FindUserById(userId)
+	if err != nil {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"success": false,
+			"message": "User not exists",
+			"data":    nil,
+		})
+	}
+	c.Locals("user", user)
 	return c.Next()
 }
 func jwtError(c *fiber.Ctx, err error) error {
