@@ -6,6 +6,7 @@ import (
 	"auth/schema"
 	"context"
 	"math/rand"
+	"strconv"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -25,6 +26,7 @@ func FindUserByPhone(phone string) (*models.User, error) {
 
 	// Find the user with the given phone number
 	err := collection.FindOne(ctx, filter).Decode(&result)
+
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			// If the error is ErrNoDocuments, it means no user was found
@@ -64,7 +66,8 @@ func UpdateUser(userID primitive.ObjectID, updatedFields map[string]any) error {
 
 }
 
-func GenerateRandomNumber() int {
+func GenerateRandomNumber() string {
 	// Generate a random number between 1000 and 9999 (inclusive)
-	return rand.Intn(9000) + 1000
+	num := rand.Intn(9000) + 1000
+	return strconv.Itoa(num)
 }
