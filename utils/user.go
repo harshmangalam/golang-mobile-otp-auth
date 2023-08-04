@@ -5,6 +5,7 @@ import (
 	"auth/models"
 	"auth/schema"
 	"context"
+	"math/rand"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -43,4 +44,9 @@ func InsertUser(user *schema.RegisterBody) (any, error) {
 	// Insert the user into the collection
 	result, err := collection.InsertOne(ctx, user)
 	return result.InsertedID, err
+}
+
+func GenerateRandomNumber() int {
+	// Generate a random number between 1000 and 9999 (inclusive)
+	return rand.Intn(9000) + 1000
 }
