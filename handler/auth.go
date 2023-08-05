@@ -160,6 +160,11 @@ func VerifyOTP(c *fiber.Ctx) error {
 		})
 	}
 
+	// remove old otp from db
+	util.UpdateUser(user.ID, map[string]any{
+		"otp": "",
+	})
+
 	return c.JSON(ResponseHTTP{
 		Success: true,
 		Data: fiber.Map{
