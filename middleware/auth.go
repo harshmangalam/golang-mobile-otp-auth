@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"auth/config"
+	"auth/schema"
 	"auth/util"
 
 	jwtware "github.com/gofiber/contrib/jwt"
@@ -25,10 +26,10 @@ func jwtSuccess(c *fiber.Ctx) error {
 	userId := claims["userId"].(string)
 	user, err := util.FindUserById(userId)
 	if err != nil {
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"success": false,
-			"message": "User not exists",
-			"data":    nil,
+		return c.Status(fiber.StatusUnauthorized).JSON(schema.ResponseHTTP{
+			Success: false,
+			Message: "User not exists",
+			Data:    nil,
 		})
 	}
 	c.Locals("user", user)
@@ -37,8 +38,8 @@ func jwtSuccess(c *fiber.Ctx) error {
 func jwtError(c *fiber.Ctx, err error) error {
 	if err.Error() == "Missing or malformed JWT" {
 		return c.Status(fiber.StatusBadRequest).
-			JSON(fiber.Map{"success": false, "message": "Missing or malformed JWT", "data": nil})
+			JSON(schema.ResponseHTTP{Success: false, Message: "Missing or malformed JWT", Data: nil})
 	}
 	return c.Status(fiber.StatusUnauthorized).
-		JSON(fiber.Map{"success": false, "message": "Invalid or expired JWT", "data": nil})
+		JSON(schema.ResponseHTTP{Success: false, Message: "Invalid or expired JWT", Data: nil})
 }

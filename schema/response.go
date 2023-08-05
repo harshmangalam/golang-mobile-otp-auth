@@ -1,4 +1,4 @@
-package handler
+package schema
 
 type ResponseHTTP struct {
 	Success bool   `json:"success"`

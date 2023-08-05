@@ -12,7 +12,7 @@ func Register(c *fiber.Ctx) error {
 	// request body data
 	body := new(schema.RegisterBody)
 	if err := c.BodyParser(body); err != nil {
-		return c.JSON(ResponseHTTP{
+		return c.JSON(schema.ResponseHTTP{
 			Success: false,
 			Data:    nil,
 			Message: err.Error(),
@@ -24,7 +24,7 @@ func Register(c *fiber.Ctx) error {
 	user, err := util.FindUserByPhone(body.Phone)
 
 	if err != nil {
-		return c.JSON(ResponseHTTP{
+		return c.JSON(schema.ResponseHTTP{
 			Success: false,
 			Data:    nil,
 			Message: err.Error(),
@@ -32,7 +32,7 @@ func Register(c *fiber.Ctx) error {
 	}
 
 	if user != nil {
-		return c.JSON(ResponseHTTP{
+		return c.JSON(schema.ResponseHTTP{
 			Success: false,
 			Data:    nil,
 			Message: "Phone number already in use",
@@ -43,14 +43,14 @@ func Register(c *fiber.Ctx) error {
 
 	id, err := util.InsertUser(body)
 	if err != nil {
-		return c.JSON(ResponseHTTP{
+		return c.JSON(schema.ResponseHTTP{
 			Success: false,
 			Data:    nil,
 			Message: err.Error(),
 		})
 	}
 
-	return c.JSON(ResponseHTTP{
+	return c.JSON(schema.ResponseHTTP{
 		Success: true,
 		Data: fiber.Map{
 			"id": id,
@@ -63,7 +63,7 @@ func Login(c *fiber.Ctx) error {
 	// request body data
 	body := new(schema.LoginSchema)
 	if err := c.BodyParser(body); err != nil {
-		return c.JSON(ResponseHTTP{
+		return c.JSON(schema.ResponseHTTP{
 			Success: false,
 			Data:    nil,
 			Message: err.Error(),
@@ -73,7 +73,7 @@ func Login(c *fiber.Ctx) error {
 	user, err := util.FindUserByPhone(body.Phone)
 
 	if err != nil {
-		return c.JSON(ResponseHTTP{
+		return c.JSON(schema.ResponseHTTP{
 			Success: false,
 			Data:    nil,
 			Message: err.Error(),
@@ -81,7 +81,7 @@ func Login(c *fiber.Ctx) error {
 	}
 
 	if user == nil {
-		return c.JSON(ResponseHTTP{
+		return c.JSON(schema.ResponseHTTP{
 			Success: false,
 			Data:    nil,
 			Message: "Phone number not exists",
@@ -98,14 +98,14 @@ func Login(c *fiber.Ctx) error {
 
 	err = util.SendOTP(user.Phone, otp)
 	if err != nil {
-		return c.JSON(ResponseHTTP{
+		return c.JSON(schema.ResponseHTTP{
 			Success: false,
 			Data:    nil,
 			Message: err.Error(),
 		})
 	}
 
-	return c.JSON(ResponseHTTP{
+	return c.JSON(schema.ResponseHTTP{
 		Success: true,
 		Data:    nil,
 		Message: "Otp sent to registered mobile number",
@@ -116,7 +116,7 @@ func VerifyOTP(c *fiber.Ctx) error {
 	// request body data
 	body := new(schema.VerifyOTPSchema)
 	if err := c.BodyParser(body); err != nil {
-		return c.JSON(ResponseHTTP{
+		return c.JSON(schema.ResponseHTTP{
 			Success: false,
 			Data:    nil,
 			Message: err.Error(),
@@ -127,7 +127,7 @@ func VerifyOTP(c *fiber.Ctx) error {
 	user, err := util.FindUserByPhone(body.Phone)
 
 	if err != nil {
-		return c.JSON(ResponseHTTP{
+		return c.JSON(schema.ResponseHTTP{
 			Success: false,
 			Data:    nil,
 			Message: err.Error(),
@@ -135,7 +135,7 @@ func VerifyOTP(c *fiber.Ctx) error {
 	}
 
 	if user == nil {
-		return c.JSON(ResponseHTTP{
+		return c.JSON(schema.ResponseHTTP{
 			Success: false,
 			Data:    nil,
 			Message: "Phone number not exists",
@@ -143,7 +143,7 @@ func VerifyOTP(c *fiber.Ctx) error {
 	}
 
 	if user.Otp != body.Otp {
-		return c.JSON(ResponseHTTP{
+		return c.JSON(schema.ResponseHTTP{
 			Success: false,
 			Data:    nil,
 			Message: "Incorrect Otp",
@@ -153,7 +153,7 @@ func VerifyOTP(c *fiber.Ctx) error {
 	// generate jwt token
 	token, err := util.GenerateJWT(user.ID.Hex())
 	if err != nil {
-		return c.JSON(ResponseHTTP{
+		return c.JSON(schema.ResponseHTTP{
 			Success: false,
 			Data:    nil,
 			Message: err.Error(),
@@ -165,7 +165,7 @@ func VerifyOTP(c *fiber.Ctx) error {
 		"otp": "",
 	})
 
-	return c.JSON(ResponseHTTP{
+	return c.JSON(schema.ResponseHTTP{
 		Success: true,
 		Data: fiber.Map{
 			"token": "Bearer " + token,
@@ -178,7 +178,7 @@ func ResendOTP(c *fiber.Ctx) error {
 	// request body data
 	body := new(schema.VerifyOTPSchema)
 	if err := c.BodyParser(body); err != nil {
-		return c.JSON(ResponseHTTP{
+		return c.JSON(schema.ResponseHTTP{
 			Success: false,
 			Data:    nil,
 			Message: err.Error(),
@@ -189,7 +189,7 @@ func ResendOTP(c *fiber.Ctx) error {
 	user, err := util.FindUserByPhone(body.Phone)
 
 	if err != nil {
-		return c.JSON(ResponseHTTP{
+		return c.JSON(schema.ResponseHTTP{
 			Success: false,
 			Data:    nil,
 			Message: err.Error(),
@@ -197,7 +197,7 @@ func ResendOTP(c *fiber.Ctx) error {
 	}
 
 	if user == nil {
-		return c.JSON(ResponseHTTP{
+		return c.JSON(schema.ResponseHTTP{
 			Success: false,
 			Data:    nil,
 			Message: "Phone number not exists",
@@ -214,14 +214,14 @@ func ResendOTP(c *fiber.Ctx) error {
 
 	err = util.SendOTP(user.Phone, otp)
 	if err != nil {
-		return c.JSON(ResponseHTTP{
+		return c.JSON(schema.ResponseHTTP{
 			Success: false,
 			Data:    nil,
 			Message: err.Error(),
 		})
 	}
 
-	return c.JSON(ResponseHTTP{
+	return c.JSON(schema.ResponseHTTP{
 		Success: true,
 		Data:    nil,
 		Message: "Sent otp to registered mobile number",
@@ -231,7 +231,7 @@ func ResendOTP(c *fiber.Ctx) error {
 func GetCurrentUser(c *fiber.Ctx) error {
 	user := c.Locals("user").(*model.User)
 	user.Otp = ""
-	return c.JSON(ResponseHTTP{
+	return c.JSON(schema.ResponseHTTP{
 		Success: true,
 		Data:    user,
 		Message: "Get current user",
