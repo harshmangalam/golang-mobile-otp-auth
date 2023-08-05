@@ -8,6 +8,7 @@
 
 ## Project structure
 
+```md
 Project
 ├── README.md
 ├── config
@@ -32,6 +33,8 @@ Project
 └── util
     ├── twillio.go
     └── user.go
+```
+
 
 ## Routes
 
