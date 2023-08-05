@@ -96,6 +96,15 @@ func Login(c *fiber.Ctx) error {
 	})
 	// send otp to user phone
 
+	err = util.SendOTP(user.Phone, otp)
+	if err != nil {
+		return c.JSON(ResponseHTTP{
+			Success: false,
+			Data:    nil,
+			Message: err.Error(),
+		})
+	}
+
 	return c.JSON(ResponseHTTP{
 		Success: true,
 		Data:    nil,
@@ -197,6 +206,16 @@ func ResendOTP(c *fiber.Ctx) error {
 		"otp": otp,
 	})
 	// send otp to user phone
+
+	err = util.SendOTP(user.Phone, otp)
+	if err != nil {
+		return c.JSON(ResponseHTTP{
+			Success: false,
+			Data:    nil,
+			Message: err.Error(),
+		})
+	}
+
 	return c.JSON(ResponseHTTP{
 		Success: true,
 		Data:    nil,
