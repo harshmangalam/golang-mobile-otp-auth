@@ -19,8 +19,7 @@ Project
 ├── go.mod
 ├── go.sum
 ├── handler
-│   ├── auth.go
-│   └── handler.go
+│   └── auth.go
 ├── main.go
 ├── middleware
 │   └── auth.go
@@ -29,9 +28,10 @@ Project
 ├── router
 │   └── router.go
 ├── schema
-│   └── auth.go
+│   ├── auth.go
+│   └── response.go
 └── util
-    ├── twillio.go
+    ├── twilio.go
     └── user.go
 ```
 
